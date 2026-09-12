@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Student – SCMS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-title">
+                <span class="header-icon">🎓</span>
+                <div>
+                    <h1>Student Course Management System</h1>
+                    <p class="subtitle">Python DB-API · SQLite · Flask</p>
+                </div>
+            </div>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back to Home</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span class="alert-icon">{% if category == 'success' %}✔{% else %}✖{% endif %}</span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <section class="card form-card">
+            <div class="card-header">
+                <h2>Add New Student</h2>
+            </div>
+
+            <form action="{{ url_for('add_student') }}" method="POST" class="student-form" novalidate>
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" class="form-control"
+                           placeholder="e.g. Rahul Sharma"
+                           value="{{ name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" class="form-control"
+                           placeholder="e.g. rahul@gmail.com"
+                           value="{{ email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course <span class="required">*</span></label>
+                    <input type="text" id="course" name="course" class="form-control"
+                           placeholder="e.g. Python Programming"
+                           value="{{ course }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age <span class="required">*</span></label>
+                    <input type="number" id="age" name="age" class="form-control"
+                           placeholder="e.g. 21" min="1" max="120"
+                           value="{{ age }}" required>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">✔ Add Student</button>
+                    <a href="{{ url_for('index') }}" class="btn btn-ghost btn-lg">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Student Course Management System &mdash; Python DB-API Assignment &mdash; Siddharth Mv (Roll No: 54) &mdash; 2026</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Course Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="header-title">
+                <span class="header-icon">🎓</span>
+                <div>
+                    <h1>Student Course Management System</h1>
+                    <p class="subtitle">Python DB-API · SQLite · Flask</p>
+                </div>
+            </div>
+            <a href="{{ url_for('add_student') }}" class="btn btn-primary">
+                <span>＋</span> Add Student
+            </a>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        <span class="alert-icon">
+                            {% if category == 'success' %}✔{% else %}✖{% endif %}
+                        </span>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Student Records Table -->
+        <section class="card">
+            <div class="card-header">
+                <h2>Student Records</h2>
+                <span class="badge">{{ students|length }} student{% if students|length != 1 %}s{% endif %}</span>
+            </div>
+
+            {% if students %}
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>Age</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in students %}
+                        <tr>
+                            <td class="col-id">{{ s['id'] }}</td>
+                            <td class="col-name">
+                                <span class="avatar">{{ s['name'][0] | upper }}</span>
+                                {{ s['name'] }}
+                            </td>
+                            <td class="col-email">{{ s['email'] }}</td>
+                            <td class="col-course">
+                                <span class="course-badge">{{ s['course'] }}</span>
+                            </td>
+                            <td class="col-age">{{ s['age'] }}</td>
+                            <td class="col-actions">
+                                <a href="{{ url_for('edit_student', student_id=s['id']) }}" class="btn btn-sm btn-edit">✏ Edit</a>
+                                <form action="{{ url_for('delete_student', student_id=s['id']) }}" method="POST" class="inline-form"
+                                      onsubmit="return confirm('Are you sure you want to delete {{ s['name'] }}?');">
+                                    <button type="submit" class="btn btn-sm btn-delete">🗑 Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <p>No students found. <a href="{{ url_for('add_student') }}">Add the first student</a>.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>Student Course Management System &mdash; Python DB-API Assignment &mdash; Siddharth Mv (Roll No: 54) &mdash; 2026</p>
+    </footer>
+</body>
+</html>
